@@ -8,12 +8,14 @@ namespace FortyWorks.FGAImporter
     {
         private readonly string _fgaContent;
         private readonly string _outputPath;
+        private bool _normalize;
         private const int HeaderLength = 10;
 
-        public FGAParser(string fgaContent, string outputPath)
+        public FGAParser(string fgaContent, string outputPath, bool normalize)
         {
             _fgaContent = fgaContent;
             _outputPath = outputPath;
+            _normalize = normalize;
         }
 
         private float[] ParseFgaContent()
@@ -68,7 +70,11 @@ namespace FortyWorks.FGAImporter
                     mainVectors[i * 3 + 0],
                     mainVectors[i * 3 + 1],
                     mainVectors[i * 3 + 2]
-                ).normalized;
+                );
+
+                if (_normalize)
+                    v = v.normalized;
+
                 return new Color(v.x, v.y, v.z, 1f);
             }).ToArray();
             

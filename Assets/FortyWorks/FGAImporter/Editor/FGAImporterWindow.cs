@@ -7,6 +7,7 @@ namespace FortyWorks.FGAImporter
 	public class FGAImporterWindow : EditorWindow
 	{
 		private static FGAImporterWindow _mainWindow;
+        private bool _normalize = true;
 		
 		[MenuItem("Window/Visual Effects/FGAImporter")]
 		public static void Open()
@@ -23,6 +24,8 @@ namespace FortyWorks.FGAImporter
 		{
 			using (new EditorGUILayout.VerticalScope())
 			{
+				_normalize = GUILayout.Toggle(_normalize, "Normalize");
+
 				if (GUILayout.Button("Import FGA Texture"))
 				{
 					var fgaFileName = EditorUtility.OpenFilePanel("Open .fga file", "", "fga");
@@ -32,7 +35,7 @@ namespace FortyWorks.FGAImporter
 					if (fgaFileName.Length == 0 || fileName.Length == 0)
 						return;
                     
-					var baker = new FGAParser(fgaContent, fileName);
+					var baker = new FGAParser(fgaContent, fileName, _normalize);
 					baker.Parse();
 				}
 			}
